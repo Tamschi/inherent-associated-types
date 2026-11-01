@@ -18,7 +18,7 @@ use syn::{
 /// Use `#[associate(crate = …)]` if aliased.
 #[proc_macro_attribute]
 pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
-	let root = if attr.is_empty() || attr.to_string() == "()" {
+	let root = if attr.is_empty() {
 		quote_spanned! {Span::mixed_site()=> inherent_associated_types}
 	} else {
 		parse_macro_input!(attr as CustomRootAttr).to_token_stream()
@@ -127,7 +127,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 	let ident_span = ident.span().resolved_at(Span::mixed_site());
 	let symbol_span = symbol_span.resolved_at(Span::mixed_site());
 	match ident_str.len() {
-		0 => quote_spanned!(ident.span()=> Associate<>),
+		0 => quote_spanned!(ident.span()=> Associated<>),
 		n if n < std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 1];
 			cast_slice_mut::<_, u8>(&mut args)
@@ -135,7 +135,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 				.expect("fits");
 			let [a0] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			quote_spanned!(ident_span=> Associate<#a0>)
+			quote_spanned!(ident_span=> Associated<#a0>)
 		}
 		n if n <= 2 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 2];
@@ -145,7 +145,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			let [a0, a1] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
-			quote_spanned!(ident_span=> Associate<#a0, #a1>)
+			quote_spanned!(ident_span=> Associated<#a0, #a1>)
 		}
 		n if n <= 3 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 3];
@@ -156,7 +156,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
 			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
-			quote_spanned!(ident_span=> Associate<#a0, #a1, #a2>)
+			quote_spanned!(ident_span=> Associated<#a0, #a1, #a2>)
 		}
 		n if n <= 5 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 5];
@@ -169,7 +169,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
 			let a3 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a3)});
 			let a4 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a4)});
-			quote_spanned!(ident_span=> Associate<#a0, #a1, #a2, #a3, #a4>)
+			quote_spanned!(ident_span=> Associated<#a0, #a1, #a2, #a3, #a4>)
 		}
 		n if n <= 4 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 4];

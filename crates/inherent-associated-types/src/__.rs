@@ -4,7 +4,7 @@ pub use inherent_associated_types_proc_macro_definitions::associated_impl;
 
 pub use crate::Associated;
 
-pub trait Associate<
+pub trait Associated<
 	const _0: u128 = 0,
 	const _1: u128 = 0,
 	const _2: u128 = 0,
