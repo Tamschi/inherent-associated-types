@@ -68,7 +68,7 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					"pub",
 					"Only public associated types are supported."
 				);
-				let associated = associated(&root, &ident);
+				let associated = associated(&root, &ident, eq_token.span);
 				let mut body = TokenStream::new();
 				brace_token.surround(&mut body, |body| {
 					quote_spanned! {Span::mixed_site()=>
@@ -79,15 +79,17 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 				quote_spanned! {Span::mixed_site()=>
 					#(#attrs)* #(#inner_attrs)*
 					#[automatically_derived]
+					// Acts as spacer for attached docs.
+					///
 					#[doc = #root::__::concat!(
-						"<code>[Associated](",
+						"Access via <code>[Associated](",
 						#root::__::stringify!(#root),
 						"::__::Associated!)!(",
 						#root::__::stringify!(#self_ty),
 						"\\[",
 						#root::__::stringify!(#ident),
 						"\\])",
-						"</code>")]
+						"</code>.")]
 					#defaultness #unsafety #impl_token #generics #polarity #root::__::#associated for #self_ty #body
 				}
 			}
@@ -120,8 +122,10 @@ impl ToTokens for CustomRootAttr {
 	}
 }
 
-fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
+fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStream {
 	let ident_str = &*ident.to_string();
+	let ident_span = ident.span().resolved_at(Span::mixed_site());
+	let symbol_span = symbol_span.resolved_at(Span::mixed_site());
 	match ident_str.len() {
 		0 => quote_spanned!(ident.span()=> Associate0),
 		n if n < std::mem::size_of::<u128>() => {
@@ -130,7 +134,8 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0] = args;
-			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate<{#root::__::obstruct_rustdoc(#a0)}>)
+			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
+			quote_spanned!(ident_span=> Associate<#a0>)
 		}
 		n if n <= 2 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 2];
@@ -138,23 +143,32 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1] = args;
-			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate2<{#root::__::obstruct_rustdoc(#a0)}, #a1>)
+			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
+			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
+			quote_spanned!(ident_span=> Associate2<#a0, #a1>)
 		}
 		n if n <= 3 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 3];
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0, a1, a3] = args;
-			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate3<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}>)
+			let [a0, a1, a2] = args;
+			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
+			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
+			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
+			quote_spanned!(ident_span=> Associate3<#a0, #a1, #a2>)
 		}
 		n if n <= 4 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 4];
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0, a1, a3, a4] = args;
-			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate4<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}, {#root::__::obstruct_rustdoc(#a4)}>)
+			let [a0, a1, a2, a3] = args;
+			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
+			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
+			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
+			let a3 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a3)});
+			quote_spanned!(ident_span=> Associate4<#a0, #a1, #a2, #a3>)
 		}
 		n => panic!("Identifiers of length {} aren't supported yet.", n),
 	}
@@ -192,7 +206,11 @@ impl ToTokens for Associated {
 				span: Span::mixed_site(),
 			},
 			elem: Box::new({
-				let associated = associated(&root.into_token_stream(), ident);
+				let associated = associated(
+					&root.into_token_stream(),
+					ident,
+					ident.span(), // The span doesn't matter here, I think.
+				);
 				parse_quote_spanned! {Span::mixed_site()=>
 					<#host as #root::__::#associated>::Associated
 				}
