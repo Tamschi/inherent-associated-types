@@ -137,14 +137,12 @@ fn associated(root: &TokenStream, ident: &Ident, spacer_span: Span) -> TokenStre
 	cast_slice_mut::<_, u8>(&mut key)
 		.write_all(ident_str.as_bytes())
 		.expect("fits");
-	let mut key = key.drain(..);
+	let mut key = key.drain(..).map(u128::from_le); // For consistency, and because little endian often produces smaller numbers here.
 	let mut output = quote_spanned! {ident_span=> Associated<};
 	if let Some(a0) = key.next() {
-		let a0 = u128::from_le(a0);
 		quote_spanned! {ident_span=> {#root::__::obstruct_rustdoc(#a0)}}.to_tokens(&mut output);
 	}
 	for a in key {
-		let a = u128::from_le(a);
 		quote_spanned! {spacer_span=> , {#root::__::obstruct_rustdoc(#a)}}.to_tokens(&mut output);
 	}
 	quote_spanned! {ident_span=> >}.to_tokens(&mut output);
