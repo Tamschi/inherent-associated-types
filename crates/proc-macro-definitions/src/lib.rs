@@ -82,14 +82,14 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					// Acts as spacer for attached docs.
 					///
 					#[doc = #root::__::concat!(
-						"Use as <code>[Associated](",
+						"<sub><code>[Associated](",
 						#root::__::stringify!(#root),
 						"::__::Associated!)!(",
 						#root::__::stringify!(#self_ty),
 						"\\[",
 						#root::__::stringify!(#ident),
 						"\\])",
-						"</code>.")]
+						"</code></sub>")]
 					#defaultness #unsafety #impl_token #generics #polarity #root::__::#associated for #self_ty #body
 				}
 			}
