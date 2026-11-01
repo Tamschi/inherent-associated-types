@@ -1,3 +1,4 @@
+#![warn(clippy::pedantic)]
 #![no_std]
 
 #[doc(hidden)]

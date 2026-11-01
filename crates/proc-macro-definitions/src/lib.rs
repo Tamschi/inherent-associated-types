@@ -82,9 +82,9 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					#[doc = #root::__::concat!(
 						"<code>[Associated](",
 						#root::__::stringify!(#root),
-						"::__::Associated!)!([",
+						"::__::Associated!)!(",
 						#root::__::stringify!(#self_ty),
-						"]\\[",
+						"\\[",
 						#root::__::stringify!(#ident),
 						"\\])",
 						"</code>")]
