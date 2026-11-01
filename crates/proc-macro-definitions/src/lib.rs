@@ -122,69 +122,33 @@ impl ToTokens for CustomRootAttr {
 	}
 }
 
-fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStream {
+fn associated(root: &TokenStream, ident: &Ident, spacer_span: Span) -> TokenStream {
 	let ident_str = &*ident.to_string();
 	let ident_span = ident.span().resolved_at(Span::mixed_site());
-	let symbol_span = symbol_span.resolved_at(Span::mixed_site());
-	match ident_str.len() {
-		0 => quote_spanned!(ident.span()=> Associated<>),
-		n if n < std::mem::size_of::<u128>() => {
-			let mut args = [0_u128; 1];
-			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident_str.as_bytes())
-				.expect("fits");
-			let [a0] = args.map(u128::from_le);
-			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			quote_spanned!(ident_span=> Associated<#a0>)
-		}
-		n if n <= 2 * std::mem::size_of::<u128>() => {
-			let mut args = [0_u128; 2];
-			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident_str.as_bytes())
-				.expect("fits");
-			let [a0, a1] = args.map(u128::from_le);
-			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
-			quote_spanned!(ident_span=> Associated<#a0, #a1>)
-		}
-		n if n <= 3 * std::mem::size_of::<u128>() => {
-			let mut args = [0_u128; 3];
-			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident_str.as_bytes())
-				.expect("fits");
-			let [a0, a1, a2] = args.map(u128::from_le);
-			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
-			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
-			quote_spanned!(ident_span=> Associated<#a0, #a1, #a2>)
-		}
-		n if n <= 5 * std::mem::size_of::<u128>() => {
-			let mut args = [0_u128; 5];
-			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident_str.as_bytes())
-				.expect("fits");
-			let [a0, a1, a2, a3, a4] = args.map(u128::from_le);
-			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
-			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
-			let a3 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a3)});
-			let a4 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a4)});
-			quote_spanned!(ident_span=> Associated<#a0, #a1, #a2, #a3, #a4>)
-		}
-		n if n <= 4 * std::mem::size_of::<u128>() => {
-			let mut args = [0_u128; 4];
-			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident_str.as_bytes())
-				.expect("fits");
-			let [a0, a1, a2, a3] = args.map(u128::from_le);
-			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
-			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
-			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
-			let a3 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a3)});
-			quote_spanned!(ident_span=> Associate4<#a0, #a1, #a2, #a3>)
-		}
-		n => panic!("Identifiers of length {} aren't supported yet.", n),
+	let spacer_span = spacer_span.resolved_at(Span::mixed_site());
+	let mut key = vec![0_u128; ident_str.len().div_ceil(size_of::<u128>())];
+	if key.len() > 5 {
+		panic!(
+			"Identifiers of length {} (> {}) aren't supported yet.",
+			key.len(),
+			size_of::<u128>() * 5
+		)
 	}
+	cast_slice_mut::<_, u8>(&mut key)
+		.write_all(ident_str.as_bytes())
+		.expect("fits");
+	let mut key = key.drain(..);
+	let mut output = quote_spanned! {ident_span=> Associated<};
+	if let Some(a0) = key.next() {
+		let a0 = u128::from_le(a0);
+		quote_spanned! {ident_span=> {#root::__::obstruct_rustdoc(#a0)}}.to_tokens(&mut output);
+	}
+	for a in key {
+		let a = u128::from_le(a);
+		quote_spanned! {spacer_span=> , {#root::__::obstruct_rustdoc(#a)}}.to_tokens(&mut output);
+	}
+	quote_spanned! {ident_span=> >}.to_tokens(&mut output);
+	output
 }
 
 #[proc_macro]
