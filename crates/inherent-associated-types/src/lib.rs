@@ -2,6 +2,69 @@
 #![forbid(unsafe_code)]
 #![no_std]
 
+//! Emulates [`inherent_associated_types`](https://github.com/rust-lang/rust/issues/8995) in stable Rust\
+//! (in a way that looks clean in both code and documentation).
+//!
+//! ```rust
+//! use inherent_associated_types::{Associated, associate};
+//!
+//! struct Host;
+//! struct A<T>(T);
+//! struct B;
+//!
+//! #[associate]
+//! impl Host {
+//! 	pub type HostA = A<()>;
+//! 	pub type HostB = B;
+//! }
+//!
+//! #[associate]
+//! impl<T> A<T> {
+//! 	/// You can document and use attributes.
+//! 	pub type AA = A<T>;
+//! 	pub type AB = B;
+//! }
+//!
+//! const _: Associated!(Host[HostA][AA][AB]) = B;
+//! const _: Associated!(Associated!(Host[HostA])[AB]) = B;
+//! ```
+//!
+//! ## Features
+//!
+//! - Clean generated documentation! For example, from the above:
+//!
+//!   <fieldset>
+//!   <section class=impl>
+//!   <h3 class=code-header>impl&lt;T> Associated&lt;AA> for <span class=struct>A</span>&lt;T></h3>
+//!   <div class=docblock><p>You can document and use attributes.</p></div>
+//!   </section>
+//!   <div class=docblock><p>
+//!   <sub><code><a>Associated</a>!(A < T >[AA])</code></sub>
+//!   </p></div>
+//!   <div class=impl-items><section class="associatedtype trait-impl">
+//!   <h4 class=code-header>type <span class=associatedtype>Associated</span> = <span class=struct>A</span>&lt;T></h4>
+//!   </section></div>
+//!   </fieldset>
+//!
+//!   which is listed as "<a>Associated&lt;AA></a>" in the sidebar.
+//!
+//! - Does not create helper types or constants.
+//!
+//! ## Limitations
+//!
+//! - Associated types must be (as) public (as their host).
+//! - Each associated type identifier is limited to about 80 Latin or 26 CJK characters.
+//! - [As in the RFC](https://github.com/rust-lang/rfcs/blob/3bdcd22feea6848a7920fa06d17ad4c6ada9db89/text/0195-associated-items.md#inherent-associated-items),
+//!   the (presence of an) inherent associated type can't be used as bound.
+//!
+//! ## Known issues
+//!
+//! - The errors in response to invalid macro input are a little unpolished,\
+//!   and currently they stop the macro outright instead of recovering where possible.
+//! - The generated documentation contains extra spaces if the host type has generics.
+//! - The error reported for missing associated types shatters the illusion (and can be a bit long).\
+//!   Similarly, identifiers longer than 16 bytes in UTF-8 cause spacers to appear in the documentation.
+
 #[doc(hidden)]
 pub mod __;
 
