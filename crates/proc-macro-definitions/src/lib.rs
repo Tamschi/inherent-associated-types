@@ -68,7 +68,7 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					"pub",
 					"Only public associated types are supported."
 				);
-				let associated = associated(&ident.to_string());
+				let associated = associated(&root, &ident);
 				let mut body = TokenStream::new();
 				brace_token.surround(&mut body, |body| {
 					quote_spanned! {Span::mixed_site()=>
@@ -120,40 +120,41 @@ impl ToTokens for CustomRootAttr {
 	}
 }
 
-fn associated(ident: &str) -> TokenStream {
-	match ident.len() {
-		0 => quote_spanned!(Span::mixed_site()=> Associated0),
+fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
+	let ident_str = &*ident.to_string();
+	match ident_str.len() {
+		0 => quote_spanned!(ident.span()=> Associated0),
 		n if n < std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 1];
 			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident.as_bytes())
+				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0] = args;
-			quote_spanned!(Span::mixed_site()=> Associated1<#a0>)
+			quote_spanned!(ident.span()=> Associated1<{#root::__::obstruct_rustdoc(#a0)}>)
 		}
 		n if n <= 2 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 2];
 			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident.as_bytes())
+				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1] = args;
-			quote_spanned!(Span::mixed_site()=> Associated2<#a0, #a1>)
+			quote_spanned!(ident.span()=> Associated2<{#root::__::obstruct_rustdoc(#a0)}, #a1>)
 		}
 		n if n <= 3 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 3];
 			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident.as_bytes())
+				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1, a3] = args;
-			quote_spanned!(Span::mixed_site()=> Associated3<#a0, #a1, #a3>)
+			quote_spanned!(ident.span()=> Associated3<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}>)
 		}
 		n if n <= 4 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 4];
 			cast_slice_mut::<_, u8>(&mut args)
-				.write_all(ident.as_bytes())
+				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1, a3, a4] = args;
-			quote_spanned!(Span::mixed_site()=> Associated4<#a0, #a1, #a3, #a4>)
+			quote_spanned!(ident.span()=> Associated4<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}, {#root::__::obstruct_rustdoc(#a4)}>)
 		}
 		n => panic!("Identifiers of length {} aren't supported yet.", n),
 	}
@@ -191,7 +192,7 @@ impl ToTokens for Associated {
 				span: Span::mixed_site(),
 			},
 			elem: Box::new({
-				let associated = associated(&ident.to_string());
+				let associated = associated(&root.into_token_stream(), ident);
 				parse_quote_spanned! {Span::mixed_site()=>
 					<#host as #root::__::#associated>::Associated
 				}

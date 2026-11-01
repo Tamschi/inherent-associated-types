@@ -23,3 +23,7 @@ pub trait Associated3<const _0: u128, const _1: u128, const _2: u128> {
 pub trait Associated4<const _0: u128, const _1: u128, const _2: u128, const _3: u128> {
 	type Associated;
 }
+
+pub const fn obstruct_rustdoc(str: u128) -> u128 {
+	str
+}
