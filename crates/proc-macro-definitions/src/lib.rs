@@ -133,7 +133,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0] = args;
+			let [a0] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			quote_spanned!(ident_span=> Associate<#a0>)
 		}
@@ -142,7 +142,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0, a1] = args;
+			let [a0, a1] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
 			quote_spanned!(ident_span=> Associate2<#a0, #a1>)
@@ -152,7 +152,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0, a1, a2] = args;
+			let [a0, a1, a2] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
 			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
@@ -163,7 +163,7 @@ fn associated(root: &TokenStream, ident: &Ident, symbol_span: Span) -> TokenStre
 			cast_slice_mut::<_, u8>(&mut args)
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
-			let [a0, a1, a2, a3] = args;
+			let [a0, a1, a2, a3] = args.map(u128::from_be);
 			let a0 = quote_spanned!(ident_span=> {#root::__::obstruct_rustdoc(#a0)});
 			let a1 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a1)});
 			let a2 = quote_spanned!(symbol_span=> {#root::__::obstruct_rustdoc(#a2)});
