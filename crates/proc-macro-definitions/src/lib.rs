@@ -1,8 +1,8 @@
 #![warn(clippy::pedantic)]
+#![forbid(unsafe_code)]
 
 use std::io::Write;
 
-use bytemuck::cast_slice_mut;
 use proc_macro::TokenStream as TokenStream1;
 use proc_macro2::{Span, TokenStream, TokenTree};
 use quote::{ToTokens, quote_spanned};
@@ -14,8 +14,7 @@ use syn::{
 };
 
 /// Use on `impl Type` with **only** `pub type` items.\
-/// `impl` generics ok.\
-/// Use `#[associate(crate = …)]` if aliased.
+/// `impl` generics ok. Use `#[associate(crate = …)]` if aliased.
 #[proc_macro_attribute]
 pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 	let root = if attr.is_empty() {
@@ -126,18 +125,22 @@ fn associated(root: &TokenStream, ident: &Ident, spacer_span: Span) -> TokenStre
 	let ident_str = &*ident.to_string();
 	let ident_span = ident.span().resolved_at(Span::mixed_site());
 	let spacer_span = spacer_span.resolved_at(Span::mixed_site());
-	let mut key = vec![0_u128; ident_str.len().div_ceil(size_of::<u128>())];
-	if key.len() > 5 {
+	const PART_SIZE: usize = size_of::<u128>();
+	let mut key = vec![0_u8; ident_str.len().div_ceil(PART_SIZE) * PART_SIZE];
+	if key.len() / PART_SIZE > 5 {
 		panic!(
 			"Identifiers of length {} (> {}) aren't supported yet.",
 			key.len(),
-			size_of::<u128>() * 5
+			PART_SIZE * 5
 		)
 	}
-	cast_slice_mut::<_, u8>(&mut key)
+	key.as_mut_slice()
 		.write_all(ident_str.as_bytes())
 		.expect("fits");
-	let mut key = key.drain(..).map(u128::from_le); // For consistency, and because little endian often produces smaller numbers here.
+	let (key, []) = key.as_chunks() else {
+		unreachable!()
+	};
+	let mut key = key.into_iter().copied().map(u128::from_le_bytes); // For consistency, and because little endian often produces smaller numbers here.
 	let mut output = quote_spanned! {ident_span=> Associated<};
 	if let Some(a0) = key.next() {
 		quote_spanned! {ident_span=> {#root::__::obstruct_rustdoc(#a0)}}.to_tokens(&mut output);

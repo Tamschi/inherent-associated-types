@@ -1,9 +1,11 @@
 #![warn(clippy::pedantic)]
+#![forbid(unsafe_code)]
 #![no_std]
 
 #[doc(hidden)]
 pub mod __;
 
+#[doc(inline)] // Not *technically* necessary, I think.
 pub use inherent_associated_types_proc_macro_definitions::associate;
 
 /// Type macro: <code>[Associated]!(Host\[Associated\])</code>.\
