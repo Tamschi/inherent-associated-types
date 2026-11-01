@@ -130,7 +130,7 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0] = args;
-			quote_spanned!(ident.span()=> Associate<{#root::__::obstruct_rustdoc(#a0)}>)
+			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate<{#root::__::obstruct_rustdoc(#a0)}>)
 		}
 		n if n <= 2 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 2];
@@ -138,7 +138,7 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1] = args;
-			quote_spanned!(ident.span()=> Associate2<{#root::__::obstruct_rustdoc(#a0)}, #a1>)
+			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate2<{#root::__::obstruct_rustdoc(#a0)}, #a1>)
 		}
 		n if n <= 3 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 3];
@@ -146,7 +146,7 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1, a3] = args;
-			quote_spanned!(ident.span()=> Associate3<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}>)
+			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate3<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}>)
 		}
 		n if n <= 4 * std::mem::size_of::<u128>() => {
 			let mut args = [0_u128; 4];
@@ -154,7 +154,7 @@ fn associated(root: &TokenStream, ident: &Ident) -> TokenStream {
 				.write_all(ident_str.as_bytes())
 				.expect("fits");
 			let [a0, a1, a3, a4] = args;
-			quote_spanned!(ident.span()=> Associate4<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}, {#root::__::obstruct_rustdoc(#a4)}>)
+			quote_spanned!(ident.span().resolved_at(Span::mixed_site())=> Associate4<{#root::__::obstruct_rustdoc(#a0)}, {#root::__::obstruct_rustdoc(#a1)}, {#root::__::obstruct_rustdoc(#a3)}, {#root::__::obstruct_rustdoc(#a4)}>)
 		}
 		n => panic!("Identifiers of length {} aren't supported yet.", n),
 	}
