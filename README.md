@@ -31,7 +31,7 @@ const _: Associated!(Associated!(Host[HostA])[AB]) = B;
 
 - Appears cleanly in documentation!
 
-  Associated types appears as e.g. `impl<T> Associated<AA> for A<T>`.\
+  Associated types are rendered as e.g. `impl<T> Associated<AA> for A<T>`.\
   (See crate documentation for a formatting example.)
 
 - 100% hygienic, and can be used as renamed or imported dependency via `#[associate(crate = …)]`.
