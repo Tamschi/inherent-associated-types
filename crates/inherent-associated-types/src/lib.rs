@@ -48,7 +48,7 @@
 //!
 //!   which is listed as "<a>Associated&lt;AA></a>" in the sidebar.
 //!
-//! - Does not create helper types or constants.
+//! - 100% hygienic bar (iff not specified) crate root used in the attribute macro.
 //!
 //! ## Limitations
 //!
