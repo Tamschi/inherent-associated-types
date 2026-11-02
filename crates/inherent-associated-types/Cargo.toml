@@ -1,6 +1,6 @@
 [package]
 name = "inherent-associated-types"
-version = "0.1.0-RC.1"
+version = "0.1.0-RC.2"
 edition = "2024"
 rust-version.workspace = true
 description = "Clean, ergonomic (emulated) inherent associated types in stable Rust."
