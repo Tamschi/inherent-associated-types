@@ -2,8 +2,8 @@
 #![forbid(unsafe_code)]
 #![no_std]
 
-//! Emulates [`inherent_associated_types`](https://github.com/rust-lang/rust/issues/8995) in stable Rust\
-//! (in a way that looks clean in both code and documentation).
+//! Emulates&nbsp;[`inherent_associated_types`](https://github.com/rust-lang/rust/issues/8995)&nbsp;in&nbsp;stable&nbsp;Rust
+//! (in&nbsp;a&nbsp;way&nbsp;that&nbsp;looks&nbsp;clean&nbsp;in&nbsp;both&nbsp;code&nbsp;and&nbsp;documentation).
 //!
 //! ```rust
 //! use inherent_associated_types::{Associated, associate};
