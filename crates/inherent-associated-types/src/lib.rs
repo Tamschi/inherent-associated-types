@@ -55,7 +55,7 @@
 //! - Associated types must be (as) public (as their host).
 //! - Each associated type identifier is limited to about 80 Latin or 26 CJK characters.
 //! - [As in the RFC](https://github.com/rust-lang/rfcs/blob/3bdcd22feea6848a7920fa06d17ad4c6ada9db89/text/0195-associated-items.md#inherent-associated-items),
-//!   the (presence of an) inherent associated type can't be used as bound.
+//!   the (presence of an) inherent associated type can't <!-- sensibly --> be used as bound.
 //!
 //! ## Known issues
 //!
@@ -64,6 +64,9 @@
 //! - The generated documentation contains extra spaces if the host type has generics.
 //! - The error reported for missing associated types shatters the illusion (and can be a bit long).\
 //!   Similarly, identifiers longer than 16 bytes in UTF-8 cause spacers to appear in the documentation.
+//!
+//! <!-- This was going to be a meme crate, but it accidentally went really well. Please enjoy! -->
+//! <!-- No AI was involved in this project. -->
 
 #[doc(hidden)]
 pub mod __;
