@@ -1,5 +1,3 @@
-pub use core::{concat, stringify};
-
 pub use inherent_associated_types_proc_macro_definitions::associated_impl;
 
 pub use crate::Associated;

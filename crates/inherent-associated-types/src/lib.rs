@@ -36,11 +36,9 @@
 //!   <fieldset>
 //!   <section class=impl>
 //!   <h3 class=code-header>impl&lt;T> Associated&lt;AA> for <span class=struct>A</span>&lt;T></h3>
-//!   <div class=docblock><p>You can document and use attributes.</p></div>
-//!   </section>
-//!   <div class=docblock><p>
+//!   <div class=docblock><p>You can document and use attributes.<br>
 //!   <sub><code><a>Associated</a>!(A < T >[AA])</code></sub>
-//!   </p></div>
+//!   </p></div></section>
 //!   <div class=impl-items><section class="associatedtype trait-impl">
 //!   <h4 class=code-header>type <span class=associatedtype>Associated</span> = <span class=struct>A</span>&lt;T></h4>
 //!   </section></div>
@@ -72,11 +70,18 @@
 #[doc(hidden)]
 pub mod __;
 
-#[doc(inline)] // Not *technically* necessary, I think.
+// #[doc(inline)] // Not *technically* necessary, I think.
+/// Use on `impl Type` with **only** `pub type` items.\
+/// `impl` generics ok. Use `#[associate(crate = …)]` if aliased.
+///
+/// Types registered through this macro can be resolved through [`Associated!`](`crate::Associated!`).\
+/// (A small usage example with link to that macro is attached in the host's documentation.)
 pub use inherent_associated_types_proc_macro_definitions::associate;
 
 /// Type macro: <code>[Associated]!(Host\[Associated\])</code>.\
 /// Supports <code>[Associated]!(Host\[A\]\[B\]…)</code> shorthand.
+///
+/// Use this macro to resolve types registered through [`#[associate]`](`associate`).
 #[macro_export]
 macro_rules! Associated {
 	($ty:ty[$ident:ident]$([$rest:ident])+) => (

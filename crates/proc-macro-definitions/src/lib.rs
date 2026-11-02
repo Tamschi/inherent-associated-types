@@ -13,8 +13,6 @@ use syn::{
 	token::{Crate, Eq, Group},
 };
 
-/// Use on `impl Type` with **only** `pub type` items.\
-/// `impl` generics ok. Use `#[associate(crate = …)]` if aliased.
 #[proc_macro_attribute]
 pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 	let root = if attr.is_empty() {
@@ -75,20 +73,14 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					}
 					.to_tokens(body);
 				});
+				let self_ty_stream = self_ty.to_token_stream();
+				let doc = format!("<sub><code>[Associated]({root}::__::Associated!)!({self_ty_stream}\\[{ident}\\])</code></sub>");
 				quote_spanned! {Span::mixed_site()=>
 					#(#attrs)* #(#inner_attrs)*
 					#[automatically_derived]
-					// Acts as spacer for attached docs.
-					///
-					#[doc = #root::__::concat!(
-						"<sub><code>[Associated](",
-						#root::__::stringify!(#root),
-						"::__::Associated!)!(",
-						#root::__::stringify!(#self_ty),
-						"\\[",
-						#root::__::stringify!(#ident),
-						"\\])",
-						"</code></sub>")]
+					// Acts as spacer for attached docs. The `\` avoids a paragraph break.
+					/// \
+					#[doc = #doc]
 					#defaultness #unsafety #impl_token #generics #polarity #root::__::#associated for #self_ty #body
 				}
 			}
