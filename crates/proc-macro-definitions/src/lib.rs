@@ -130,7 +130,7 @@ fn associated(root: &TokenStream, ident: &Ident, spacer_span: Span) -> TokenStre
 	if key.len() / PART_SIZE > 5 {
 		panic!(
 			"Identifiers of length {} (> {}) aren't supported yet.",
-			key.len(),
+			ident_str.len(),
 			PART_SIZE * 5
 		)
 	}

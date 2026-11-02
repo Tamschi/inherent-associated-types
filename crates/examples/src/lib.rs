@@ -15,8 +15,8 @@ impl Host {
 #[associate]
 impl<T> GenericHost<T> {
 	/// There's documentation here.
-	pub type Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = Host;
+	pub type Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = Host;
 }
 
-const _: Associated!(GenericHost<()>[Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Associated]) =
+const _: Associated!(GenericHost<()>[Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Associated]) =
 	Associated;
