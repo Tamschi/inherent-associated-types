@@ -1,5 +1,9 @@
 [workspace]
 resolver = "3"
 members = ["crates/*"]
+package.rust-version = "1.88"
+package.readme = true
+package.authors = ["Tamme Schichler <tamme@schichler.de>"]
 package.license = "EUPL-1.2"
 package.license-file = "LICENSE.txt"
+package.repository = "https://github.com/Tamschi/inherent-associated-types"

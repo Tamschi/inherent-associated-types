@@ -31,7 +31,7 @@
 //!
 //! ## Features
 //!
-//! - Clean generated documentation! For example, from the above:
+//! - Appears cleanly in documentation! For example, from the above:
 //!
 //!   <fieldset>
 //!   <section class=impl>

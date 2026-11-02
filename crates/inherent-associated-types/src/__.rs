@@ -1,5 +1,6 @@
 pub use inherent_associated_types_proc_macro_definitions::associated_impl;
 
+// Used for documentation.
 pub use crate::Associated;
 
 pub trait Associated<

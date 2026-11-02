@@ -2,10 +2,16 @@
 name = "inherent-associated-types"
 version = "0.1.0-RC.1"
 edition = "2024"
+rust-version.workspace = true
+description = "Clean, ergonomic (emulated) inherent associated types in stable Rust."
+keywords = ["inherent", "associated", "types", "inherent_associated_types"]
+categories = ["rust-patterns", "no-std::no-alloc"]
+readme.workspace = true
+authors.workspace = true
 license.workspace = true
 license-file.workspace = true
+repository.workspace = true
 publish = false
-#TODO: repository and meta data
 
 [dependencies]
 inherent-associated-types_proc-macro-definitions = { version = "0.1.0-RC.1", path = "../proc-macro-definitions", default-features = false }

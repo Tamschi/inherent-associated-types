@@ -2,10 +2,13 @@
 name = "inherent-associated-types_proc-macro-definitions"
 version = "0.1.0-RC.1"
 edition = "2024"
+rust-version.workspace = true
+description = "Macro definitions for inherent-associated-types."
+authors.workspace = true
 license.workspace = true
 license-file.workspace = true
+repository.workspace = true
 publish = false
-#TODO: repository and meta data
 
 [lib]
 proc-macro = true

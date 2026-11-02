@@ -3,13 +3,6 @@
 version = 4
 
 [[package]]
-name = "examples"
-version = "0.0.0"
-dependencies = [
- "inherent-associated-types",
-]
-
-[[package]]
 name = "inherent-associated-types"
 version = "0.1.0-RC.1"
 dependencies = [
