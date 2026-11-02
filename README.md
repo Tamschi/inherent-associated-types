@@ -60,7 +60,7 @@ Both *inherent-associated-types* and *inherent-associated-types_proc-macro-defin
 
 ## Versioning
 
-Feature and patch versions are synchronised across incompatible branches and not reset[^1], except for v1.0.0. Branches may skip irrelevant releases to flag this in CI.
+Feature and patch versions are synchronised across incompatible branches and not reset[^1], except for v1.0.0. Branches may skip irrelevant releases.
 
 Release-candidate versions are suffixed `-RC.n` where `n` is a positive integer.
 
