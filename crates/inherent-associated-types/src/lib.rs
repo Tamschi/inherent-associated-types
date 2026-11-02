@@ -64,6 +64,7 @@
 //! - The generated documentation contains extra spaces if the host type has generics.
 //! - The error reported for missing associated types shatters the illusion (and can be a bit long).\
 //!   Similarly, identifiers longer than 16 bytes in UTF-8 cause spacers to appear in the documentation.
+//! - Generic associated types (GATs) are currently not supported.
 //!
 //! <!-- This was going to be a meme crate, but it accidentally went really well. Please enjoy! -->
 //! <!-- No AI was involved in this project. -->
