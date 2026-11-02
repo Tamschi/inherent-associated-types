@@ -16,7 +16,7 @@ use syn::{
 #[proc_macro_attribute]
 pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 	let root = if attr.is_empty() {
-		quote_spanned! {Span::mixed_site()=> inherent_associated_types}
+		quote_spanned! {Span::mixed_site()=> ::inherent_associated_types}
 	} else {
 		parse_macro_input!(attr as CustomRootAttr).to_token_stream()
 	};

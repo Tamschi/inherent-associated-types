@@ -1,20 +1,27 @@
 use std::marker::PhantomData;
 
-use inherent_associated_types::{Associated, associate};
+use ::inherent_associated_types::{Associated, associate};
+mod inherent_associated_types {}
 
 pub enum Host {}
 pub struct GenericHost<T>(PhantomData<T>);
 pub struct Associated;
 
-#[associate(crate = inherent_associated_types)]
+use ::inherent_associated_types as iat;
+#[iat::associate(crate = iat)]
 impl Host {
 	pub type Associated = Associated;
 }
 
 #[associate]
 impl<T> GenericHost<T> {
-	pub type Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa = Host;
+	pub type Associated______________________________________________________________________ =
+		Host;
 }
 
-const _: Associated!(GenericHost<()>[Associatedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa][Associated]) =
+const _: Associated!(GenericHost<()>[Associated______________________________________________________________________][Associated]) =
 	Associated;
+const _: Associated!(
+	Associated!(GenericHost<()>[Associated______________________________________________________________________])
+		[Associated]
+) = Associated;

@@ -46,7 +46,7 @@
 //!
 //!   which is listed as "<a>Associated&lt;AA></a>" in the sidebar.
 //!
-//! - 100% hygienic bar (iff not specified) crate root used in the attribute macro.
+//! - 100% hygienic, and can be used as renamed or imported dependency (explicitly for the attribute macro).
 //!
 //! ## Limitations
 //!
@@ -72,7 +72,7 @@ pub mod __;
 
 // #[doc(inline)] // Not *technically* necessary, I think.
 /// Use on `impl Type` with **only** `pub type` items.\
-/// `impl` generics ok. Use `#[associate(crate = …)]` if aliased.
+/// `impl` generics ok. Use `#[associate(crate = …)]` if renamed or imported.
 ///
 /// Types registered through this macro can be resolved through [`Associated!`](`crate::Associated!`).\
 /// (A small usage example with link to that macro is attached in the host's documentation.)
