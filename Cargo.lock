@@ -11,14 +11,14 @@ dependencies = [
 
 [[package]]
 name = "inherent-associated-types"
-version = "0.1.0"
+version = "0.1.0-RC.1"
 dependencies = [
  "inherent-associated-types_proc-macro-definitions",
 ]
 
 [[package]]
 name = "inherent-associated-types_proc-macro-definitions"
-version = "0.1.0"
+version = "0.1.0-RC.1"
 dependencies = [
  "proc-macro2",
  "quote",

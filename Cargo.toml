@@ -1,3 +1,5 @@
 [workspace]
 resolver = "3"
 members = ["crates/*"]
+package.license = "EUPL-1.2"
+package.license-file = "LICENSE.txt"
