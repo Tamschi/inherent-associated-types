@@ -25,6 +25,8 @@
 //! 	pub type AB = B;
 //! }
 //!
+//! const _: Associated!(Host) = Host;
+//! const _: Associated!(Host[HostB]) = B;
 //! const _: Associated!(Host[HostA][AA][AB]) = B;
 //! const _: Associated!(Associated!(Host[HostA])[AB]) = B;
 //! ```
@@ -84,10 +86,8 @@ pub use inherent_associated_types_proc_macro_definitions::associate;
 /// Use this macro to resolve types registered through [`#[associate]`](`associate`).
 #[macro_export]
 macro_rules! Associated {
-	($ty:ty[$ident:ident]$([$rest:ident])+) => (
-		$crate::Associated!($crate::__::associated_impl!($crate $ty $ident)$([$rest])+)
+	($ty:ty[$ident:ident]$([$rest:ident])*) => (
+		$crate::Associated!($crate::__::associated_impl!($crate $ty $ident)$([$rest])*)
 	);
-	($ty:ty[$ident:ident]) => (
-		$crate::__::associated_impl!($crate $ty $ident)
-	);
+	($ty:ty) => ($ty);
 }

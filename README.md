@@ -23,6 +23,8 @@ impl<T> A<T> {
     pub type AB = B;
 }
 
+const _: Associated!(Host) = Host;
+const _: Associated!(Host[HostB]) = B;
 const _: Associated!(Host[HostA][AA][AB]) = B;
 const _: Associated!(Associated!(Host[HostA])[AB]) = B;
 ```
