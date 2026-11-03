@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "inherent-associated-types"
-version = "0.1.0-RC.3"
+version = "0.1.0-RC.4"
 dependencies = [
  "inherent-associated-types_proc-macro-definitions",
 ]
