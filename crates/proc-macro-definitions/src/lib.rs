@@ -73,14 +73,15 @@ pub fn associate(attr: TokenStream1, item: TokenStream1) -> TokenStream1 {
 					}
 					.to_tokens(body);
 				});
-				let self_ty_stream = self_ty.to_token_stream();
-				let doc = format!("<sub><code>[Associated]({root}::__::Associated!)!({self_ty_stream}\\[{ident}\\])</code></sub>");
+				let doc = {
+					let root = root.to_string().replace(' ', "").replace('<', "&lt;");
+					let self_ty = self_ty.to_token_stream().to_string().replace(' ', "").replace(',', ", ").replace('<', "&lt;");
+					format!("<code>[Associated]({root}::__::Associated!)!({self_ty}\\[{ident}\\])</code><br>")
+				};
 				quote_spanned! {Span::mixed_site()=>
+					#[doc = #doc]
 					#(#attrs)* #(#inner_attrs)*
 					#[automatically_derived]
-					// Acts as spacer for attached docs. The `\` avoids a paragraph break.
-					/// \
-					#[doc = #doc]
 					#defaultness #unsafety #impl_token #generics #polarity #root::__::#associated for #self_ty #body
 				}
 			}

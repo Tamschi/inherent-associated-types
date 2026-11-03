@@ -59,7 +59,6 @@
 //!
 //! - The errors in response to invalid macro input are a little unpolished,\
 //!   and currently they stop the macro outright instead of recovering where possible.
-//! - The generated documentation contains extra spaces if the host type has generics.
 //! - The error reported for missing associated types shatters the illusion (and can be a bit long).\
 //!   Similarly, identifiers longer than 16 bytes in UTF-8 cause spacers to appear in the documentation.
 //! - Generic associated types (GATs) are currently not supported.
