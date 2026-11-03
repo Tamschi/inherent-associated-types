@@ -36,8 +36,9 @@
 //!   <fieldset>
 //!   <section class=impl>
 //!   <h3 class=code-header>impl&lt;T> Associated&lt;AA> for <span class=struct>A</span>&lt;T></h3>
-//!   <div class=docblock><p>You can document and use attributes.<br>
-//!   <sub><code><a>Associated</a>!(A < T >[AA])</code></sub>
+//!   <div class=docblock><p>
+//!   <code><a href=./macro.Associated.html>Associated</a>!(A&lt;T>[AA])</code><br>
+//!   You can document and use attributes.
 //!   </p></div></section>
 //!   <div class=impl-items><section class="associatedtype trait-impl">
 //!   <h4 class=code-header>type <span class=associatedtype>Associated</span> = <span class=struct>A</span>&lt;T></h4>
