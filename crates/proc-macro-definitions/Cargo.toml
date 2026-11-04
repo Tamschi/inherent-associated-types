@@ -1,6 +1,6 @@
 [package]
 name = "inherent-associated-types_proc-macro-definitions"
-version = "0.1.0-RC.2"
+version = "0.1.0"
 edition = "2024"
 rust-version.workspace = true
 description = "Macro definitions for inherent-associated-types."
